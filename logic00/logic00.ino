@@ -16,23 +16,32 @@ int playerTwoCount = 0;
 int playerOneButtonState = 0;
 int playerTwoButtonState = 0;
 
+
 int goalLEDIndex = 24;
     
 void setup() { 
    FastLED.addLeds<WS2811, DATA_PIN>(leds, NUM_LEDS);
+   pinMode(4, INPUT);
 }
 void loop() {
+  
+    playerOneButtonState = digitalRead(4);// CHANGE TO PROPER DECLARATION
+    if(playerOneButtonState == HIGH) {
+      goalLEDIndex = random(0, 50);
+    }
     for(ledPositionIndex; ledPositionIndex < NUM_LEDS; ledPositionIndex++) { 
-        leds[dot] = CRGB::Blue;
+        leds[ledPositionIndex] = CRGB::Blue;
         leds[goalLEDIndex] = CRGB::Pink;
         FastLED.show();
         delay(30);
         // clear this led for the next time around the loop
-        leds[dot] = CRGB::Black;
+        leds[ledPositionIndex] = CRGB::Black;
         leds[goalLEDIndex] = CRGB::Pink;
         FastLED.show();
         delay(30);
     }
-  goalLEDIndex = random(0, 50);
-    
+  leds[goalLEDIndex] = CRGB::Black;
+  FastLED.show();
+  ledPositionIndex = 0;
+  
 }
