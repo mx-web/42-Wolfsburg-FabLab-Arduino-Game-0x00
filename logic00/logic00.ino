@@ -20,29 +20,35 @@ int playerOneButtonPin = 2;
 int playerTwoButtonPin = 0;
 
 int goalLEDIndex = 24;
+
+int LEDdelay = 30;
     
 void setup() { 
    FastLED.addLeds<WS2811, DATA_PIN>(leds, NUM_LEDS);
    pinMode(4, INPUT);
+   Serial.begin(9600);
 }
 void loop() {
   
-    playerOneButtonState = digitalRead(playerOneButtonPin);
     
-    if(playerOneButtonState == HIGH && ) {
-      goalLEDIndex = random(0, 50);
-    }
     
     for(ledPositionIndex; ledPositionIndex < NUM_LEDS; ledPositionIndex++) { 
         leds[ledPositionIndex] = CRGB::Blue;
         leds[goalLEDIndex] = CRGB::Pink;
         FastLED.show();
-        delay(30);
+        delay(LEDdelay);
+        playerOneButtonState = digitalRead(playerOneButtonPin);
+    
+        if(playerOneButtonState == HIGH && ledPositionIndex == goalLEDIndex) {
+          goalLEDIndex = random(0, 50);
+          LEDdelay -= 2;
+          Serial.println(LEDdelay);
+        }
         // clear this led for the next time around the loop
         leds[ledPositionIndex] = CRGB::Black;
         leds[goalLEDIndex] = CRGB::Pink;
         FastLED.show();
-        delay(30);
+        delay(LEDdelay);
     }
   leds[goalLEDIndex] = CRGB::Black;
   FastLED.show();
