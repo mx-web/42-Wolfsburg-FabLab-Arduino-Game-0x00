@@ -16,6 +16,8 @@ int playerTwoCount = 0;
 int playerOneButtonState = 0;
 int playerTwoButtonState = 0;
 
+int playerOneButtonPin = 2;
+int playerTwoButtonPin = 0;
 
 int goalLEDIndex = 24;
     
@@ -25,10 +27,12 @@ void setup() {
 }
 void loop() {
   
-    playerOneButtonState = digitalRead(4);// CHANGE TO PROPER DECLARATION
-    if(playerOneButtonState == HIGH) {
+    playerOneButtonState = digitalRead(playerOneButtonPin);
+    
+    if(playerOneButtonState == HIGH && ) {
       goalLEDIndex = random(0, 50);
     }
+    
     for(ledPositionIndex; ledPositionIndex < NUM_LEDS; ledPositionIndex++) { 
         leds[ledPositionIndex] = CRGB::Blue;
         leds[goalLEDIndex] = CRGB::Pink;
