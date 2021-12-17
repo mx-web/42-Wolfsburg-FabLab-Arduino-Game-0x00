@@ -31,6 +31,7 @@ int LEDdelay = 30;
 void setup() { 
    FastLED.addLeds<WS2811, DATA_PIN>(leds, NUM_LEDS);
    pinMode(4, INPUT);
+   randomSeed(analogRead(0));
    Serial.begin(9600);
 }
 void loop() {
@@ -40,29 +41,56 @@ void loop() {
         FastLED.show();
         delay(LEDdelay);
         if (playerIndex == 1){
-        playerOneButtonState = digitalRead(playerOneButtonPin);
-    
-        if(playerOneButtonState == HIGH && ledPositionIndex == goalLEDIndex) {
-          goalLEDIndex = random(0, 50);
-          LEDdelay -= 2;
-          playerOneCount++;
-          Serial.println(LEDdelay);
-          delay(100);
-        }
-        else if (playerOneButtonState == HIGH && ledPositionIndex != goalLEDIndex){
-            playerOneErrorCount++;
-            delay(75);
-             Serial.println(playerOneErrorCount);
+          playerOneButtonState = digitalRead(playerOneButtonPin);
+      
+          if(playerOneButtonState == HIGH && ledPositionIndex == goalLEDIndex) {
+            goalLEDIndex = random(0, 50);
+            LEDdelay -= 2;
+            playerOneCount++;
+            Serial.println(LEDdelay);
+            delay(100);
           }
-         if (playerOneErrorCount == maxerror){
-          fill_solid(leds,50, CRGB::Red);
+          else if (playerOneButtonState == HIGH && ledPositionIndex != goalLEDIndex){
+              playerOneErrorCount++;
+              delay(75);
+               Serial.println(playerOneErrorCount);
+            }
+           if (playerOneErrorCount == maxerror){
+            fill_solid(leds,50, CRGB::Red);
+            
+            FastLED.show();
+            delay(1000);
+            fill_solid(leds,50, CRGB::Black);
+           
+            playerIndex = 2;
+            }
           
-          FastLED.show();
-          delay(1000);
-          fill_solid(leds,50, CRGB::Black);
-         
-          playerIndex = 2;
+        }
+        if (playerIndex == 2){
+          playerTwoButtonState = digitalRead(playerOneButtonPin);
+      
+          if(playerTwoButtonState == HIGH && ledPositionIndex == goalLEDIndex) {
+            goalLEDIndex = random(0, 50);
+            LEDdelay -= 2;
+            playerOneCount++;
+            Serial.println(LEDdelay);
+            delay(100);
           }
+          else if (playerTwoButtonState == HIGH && ledPositionIndex != goalLEDIndex){
+              playerTwoErrorCount++;
+              delay(75);
+               Serial.println(playerTwoErrorCount);
+            }
+           if (playerTwoErrorCount == maxerror){
+            fill_solid(leds,50, CRGB::Red);
+            
+            FastLED.show();
+            delay(1000);
+            fill_solid(leds,50, CRGB::Black);
+           
+            playerIndex = 1;
+            }
+          
         }
         // clear this led for the next time around the loop
         leds[ledPositionIndex] = CRGB::Black;

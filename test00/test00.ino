@@ -34,10 +34,41 @@ void setup() {
    Serial.begin(9600);
 }
 void loop() {
-    fill_solid(leds,50, CRGB::Black);
+    for(ledPositionIndex; ledPositionIndex < NUM_LEDS; ledPositionIndex++) { 
+        leds[ledPositionIndex] = CRGB::Blue;
+        leds[goalLEDIndex] = CRGB::Green;
+        FastLED.show();
+        delay(LEDdelay);
+        if (playerIndex == 1){
+        playerOneButtonState = digitalRead(playerOneButtonPin);
     
-  //leds[goalLEDIndex] = CRGB::Black;
-  //FastLED.show();
+        if(playerOneButtonState == HIGH && ledPositionIndex == goalLEDIndex) {
+          goalLEDIndex = random(0, 10);
+          LEDdelay -= 2;
+          playerOneCount++;
+          Serial.println(LEDdelay);
+          delay(100);
+        }
+        else if (playerOneButtonState == HIGH && ledPositionIndex != goalLEDIndex){
+            playerOneErrorCount++;
+            delay(75);
+             Serial.println(playerOneErrorCount);
+          }
+         if (playerOneErrorCount == maxerror){
+          fill_solid(leds,10, CRGB::Red);
+          FastLED.show();
+          delay(1000);
+          fill_solid(leds,10, CRGB::Black);        
+          playerIndex = 2;
+          }
+        }
+        // clear this led for the next time around the loop
+        leds[ledPositionIndex] = CRGB::Black;
+        leds[goalLEDIndex] = CRGB::Green;
+        FastLED.show();
+        delay(LEDdelay);
+    }
+  leds[goalLEDIndex] = CRGB::Black;
+  FastLED.show();
   ledPositionIndex = 0;
-  
 }
