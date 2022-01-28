@@ -22,7 +22,7 @@ int playerOneButtonState = 0;
 int playerTwoButtonState = 0;
 
 int playerOneButtonPin = 2;
-int playerTwoButtonPin = 0;
+int playerTwoButtonPin = 4;
 
 int goalLEDIndex = 24;
 
@@ -31,6 +31,11 @@ int LEDdelay = 30;
 void setup() { 
    FastLED.addLeds<WS2811, DATA_PIN>(leds, NUM_LEDS);
    pinMode(4, INPUT);
+   pinMode(8, OUTPUT);
+   pinMode(9,OUTPUT);
+
+   digitalWrite(8, HIGH);
+   digitalWrite(9, HIGH);
    randomSeed(analogRead(0));
    Serial.begin(9600);
 }
@@ -63,11 +68,13 @@ void loop() {
             fill_solid(leds,50, CRGB::Black);
            
             playerIndex = 2;
+            playerOneErrorCount == 0;
             }
           
         }
         if (playerIndex == 2){
-          playerTwoButtonState = digitalRead(playerOneButtonPin);
+          Serial.println("test player 2");
+          playerTwoButtonState = digitalRead(playerTwoButtonPin);
       
           if(playerTwoButtonState == HIGH && ledPositionIndex == goalLEDIndex) {
             goalLEDIndex = random(0, 50);
@@ -89,6 +96,7 @@ void loop() {
             fill_solid(leds,50, CRGB::Black);
            
             playerIndex = 1;
+            playerTwoErrorCount == 0;
             }
           
         }
